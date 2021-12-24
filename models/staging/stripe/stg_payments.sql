@@ -9,7 +9,7 @@ WITH
             ,created AS payment_creation_date
             ,_batched_at
         FROM
-            dbt-tutorial.stripe.payment
+            {{ source('stripe', 'payment') }}
     )
 
 SELECT
