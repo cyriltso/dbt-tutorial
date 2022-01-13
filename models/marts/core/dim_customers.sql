@@ -13,6 +13,14 @@ WITH
             {{ ref('fct_orders') }}
     ),
 
+    professions AS (
+        SELECT
+            CAST(customer_id AS STRING) AS customer_id
+            ,job 
+        FROM    
+            {{ ref('professions') }}
+    ),
+
     customer_orders AS (
         SELECT
             customer_id
@@ -31,6 +39,7 @@ WITH
             customers.customer_id
             ,customers.first_name
             ,customers.last_name
+            ,professions.job
             ,customer_orders.first_order_date
             ,customer_orders.most_recent_order_date
             ,COALESCE(customer_orders.number_of_orders, 0) AS number_of_orders
@@ -40,6 +49,10 @@ WITH
         LEFT JOIN 
             customer_orders 
         USING 
+            (customer_id)
+        LEFT JOIN
+            professions
+        USING
             (customer_id)
     )
 
